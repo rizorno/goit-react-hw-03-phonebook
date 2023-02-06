@@ -4,6 +4,8 @@ import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 
+const LOCAL_KEY_CONTACTS = 'contacts';
+
 export class App extends Component {
   state = {
     contacts: [
@@ -16,16 +18,18 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    const contactsLS = localStorage.getItem('contacts');
-    const parsedContactsLS = JSON.parse(contactsLS);
-    if (parsedContactsLS) {
-      this.setState({ contacts: parsedContactsLS });
+    const contactsLS = JSON.parse(localStorage.getItem(LOCAL_KEY_CONTACTS));
+    if (contactsLS) {
+      this.setState({ contacts: contactsLS });
     }
   }
 
   componentDidUpdate(_, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    if (this.state.contacts.length !== prevState.contacts.length) {
+      localStorage.setItem(
+        LOCAL_KEY_CONTACTS,
+        JSON.stringify(this.state.contacts)
+      );
     }
   }
 
